@@ -120,8 +120,8 @@ alias j=z
 
 source $(which assume-role)
 
-# bgnotify
-source $HOME/.zsh-background-notify/bgnotify.plugin.zsh
+# # bgnotify
+# source $HOME/.zsh-background-notify/bgnotify.plugin.zsh
 
 PATH=$PATH:/usr/local/Cellar/libpq/11.5_1/bin/:~/bin/
 
@@ -167,7 +167,11 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # AWS MFA
 export AWS_MFA_SEC=`cat ~/.aws/20220823_mfasecret`
-alias awsopt='oathtool --totp --base32 $AWS_MFA_SEC | pbcopy && pbpaste && echo "ワンタイムパスワードがコピーされました"'
+alias mfa-aws='oathtool --totp --base32 $AWS_MFA_SEC | pbcopy && pbpaste && echo "[AWS] ワンタイムパスワードがコピーされました"'
+
+# Github MFA
+export GH_MFA_SEC=`cat ~/dev/keys/github-mfa-sec`
+alias mfa-gh='oathtool --totp --base32 $GH_MFA_SEC | pbcopy && pbpaste && echo "[Github] ワンタイムパスワードがコピーされました"'
 
 # PHP env
 export PATH="$HOME/.phpenv/bin:$PATH"
@@ -176,5 +180,11 @@ eval "$(phpenv init -)"
 export PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/libjpeg/lib/pkgconfig:/usr/local/opt/libpng/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig:/usr/local/opt/libzip/lib/pkgconfig:/usr/local/opt/oniguruma/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/tidy-html5/lib/pkgconfig" \
 export PHP_BUILD_CONFIGURE_OPTS="--with-bz2=/usr/local/opt/bzip2 --with-iconv=/usr/local/opt/libiconv" \
 
+# diff -> colordiff
+if [[ -x `which colordiff` ]]; then
+  alias diff='colordiff'
+fi
+
+alias jruby='~/bin/jruby-complete-9.1.15.0.jar'
 
 #zprof
