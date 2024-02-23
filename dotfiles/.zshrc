@@ -60,22 +60,11 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
-
 ### End of Zinit's installer chunk
-zinit snippet OMZL::git.zsh
-zinit snippet OMZP::git
-zinit snippet PZT::modules/helper/init.zsh
-
-## Load pure theme
-zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
-zinit light sindresorhus/pure
 
 zinit light zsh-users/zsh-autosuggestions
 
 zstyle ':completion:*' completer _complete _approximate
-
-zinit ice depth"1" lucid
-zinit snippet OMZL::completion.zsh
 
 ## コマンド補完
 zinit ice wait'0'; zinit light zsh-users/zsh-completions
@@ -126,7 +115,7 @@ export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PA
 
 
 # asdf
-. /usr/local/opt/asdf/libexec/asdf.sh
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 . ~/.asdf/plugins/java/set-java-home.zsh
 export PATH="$(yarn global bin):$PATH"
 
@@ -182,9 +171,7 @@ alias jruby='~/bin/jruby-complete-9.1.15.0.jar'
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/hyuga/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/path.zsh.inc'; fi
-#zprof
 
-# eval "$(starship init zsh)"
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/hyuga/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/completion.zsh.inc'; fi
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
