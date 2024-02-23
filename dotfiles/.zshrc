@@ -108,21 +108,14 @@ alias sl='serverless'
 setopt auto_cd
 
 sshd() {
-  ssh -i ~/.ssh/Juicer_replace.pem ec2-user@$1
+  ssh -i ~/.ssh/juicer/Juicer_replace.pem ec2-user@$1
 }
 
 scpd() {
-  scp -i ~/.ssh/Juicer_replace.pem $1 ec2-user@$2
+  scp -i ~/.ssh/juicer/Juicer_replace.pem $1 ec2-user@$2
 }
 
-# z
-. ~/z/z.sh
-alias j=z
-
 source $(which assume-role)
-
-# # bgnotify
-# source $HOME/.zsh-background-notify/bgnotify.plugin.zsh
 
 PATH=$PATH:/usr/local/Cellar/libpq/11.5_1/bin/:~/bin/
 
@@ -147,11 +140,11 @@ zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
 #gcloud
-local s="source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'"
-s="$s;source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'"
-zinit ice atload"${s}" wait lucid
-zinit light zdharma-continuum/null
-alias gcp='gcloud'
+# local s="source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'"
+# s="$s;source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'"
+# zinit ice atload"${s}" wait lucid
+# zinit light zdharma-continuum/null
+# alias gcp='gcloud'
 
 # Go
 export GOPATH="${HOME}/go"
@@ -173,18 +166,11 @@ alias mfa-aws='oathtool --totp --base32 $AWS_MFA_SEC | pbcopy && pbpaste && echo
 alias mfa-aws-s='NUM=`oathtool --totp --base32 $AWS_MFA_SEC` && echo $NUM ap-northeast-1'
 
 # Github MFA
-export GH_MFA_SEC=`cat ~/dev/keys/github-mfa-sec`
-alias mfa-gh='oathtool --totp --base32 $GH_MFA_SEC | pbcopy && pbpaste && echo "[Github] ワンタイムパスワードがコピーされました"'
-
-# PHP env
-export PATH="$HOME/.phpenv/bin:$PATH"
-eval "$(phpenv init -)"
+# export GH_MFA_SEC=`cat ~/dev/keys/github-mfa-sec`
+# alias mfa-gh='oathtool --totp --base32 $GH_MFA_SEC | pbcopy && pbpaste && echo "[Github] ワンタイムパスワードがコピーされました"'
 
 export PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/libjpeg/lib/pkgconfig:/usr/local/opt/libpng/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig:/usr/local/opt/libzip/lib/pkgconfig:/usr/local/opt/oniguruma/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/tidy-html5/lib/pkgconfig" \
 export PHP_BUILD_CONFIGURE_OPTS="--with-bz2=/usr/local/opt/bzip2 --with-iconv=/usr/local/opt/libiconv" \
-
-# pyenv
-eval "$(pyenv init --path)"
 
 # diff -> colordiff
 if [[ -x `which colordiff` ]]; then
@@ -193,6 +179,13 @@ fi
 
 alias jruby='~/bin/jruby-complete-9.1.15.0.jar'
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/hyuga/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/path.zsh.inc'; fi
 #zprof
 
 # eval "$(starship init zsh)"
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/hyuga/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
