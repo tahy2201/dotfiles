@@ -62,6 +62,17 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 ### End of Zinit's installer chunk
 
+
+# Load starship theme
+# line 1: `starship` binary as command, from github release
+# line 2: starship setup at clone(create init.zsh, completion)
+# line 3: pull behavior same as clone, source init.zsh
+zinit ice as"command" from"gh-r" \
+          atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+          atpull"%atclone" src"init.zsh"
+zinit light starship/starship
+export STARSHIP_CONFIG=~/work/tahy/dotfiles/starship/starship.toml
+
 zinit light zsh-users/zsh-autosuggestions
 
 zstyle ':completion:*' completer _complete _approximate
@@ -120,6 +131,7 @@ export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PA
 export PATH="$(yarn global bin):$PATH"
 
 # peco (ctrl + r)
+# 要: brew install peco
 function peco-history-selection() {
     BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
     CURSOR=$#BUFFER
@@ -140,13 +152,12 @@ export GOPATH="${HOME}/go"
 PATH=$PATH:$GOPATH/bin
 
 # kubectl auto complete
-local s="source <(kubectl completion zsh)"
-zinit ice atload"${s}" wait lucid
-zinit light zdharma-continuum/null
-alias k=kubectl
-complete -F __start_kubectl k
+# local s="source <(kubectl completion zsh)"
+# zinit ice atload"${s}" wait lucid
+# zinit light zdharma-continuum/null
+# alias k=kubectl
+# complete -F __start_kubectl k
 
-# export PATH="/usr/local/opt/php@7.0/bin:/usr/local/opt/php@7.0/sbin:$PATH"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # AWS MFA
