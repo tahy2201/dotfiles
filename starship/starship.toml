@@ -91,8 +91,32 @@ $character"""
 [aws]
 disabled = true
 
+[docker_context]
+disabled = true
+
 [git_branch]
 format = '- [$symbol$branch(:$remote_branch)]($style) '
+
+[java]
+format = '- [${symbol}(${version} )]($style)'
+symbol = " "
+style = 'fg:27'
+
+[nodejs]
+format = '- [$symbol($version )]($style)'
+style = 'fg:76'
+
+[package]
+disabled = true
+
+[ruby]
+format = '- [$symbol($version )]($style)'
+symbol = "󰴭 "
+style = 'fg:125'
+
+[terraform]
+format = '- [$symbol$version/$workspace]($style)'
+symbol = "󱁢 "
 
 [time]
 disabled = false
@@ -105,9 +129,13 @@ disabled = true
 
 [custom.assume_role]
 symbol = '󰆧'
-command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE" '
+command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE " '
 style = 'bold fg:178'
 when = """
 test "$AWS_ACCOUNT_ROLE" -a "$AWS_ACCOUNT_NAME"
 """
 format = '- [$symbol $output]($style)'
+
+[cmd_duration]
+min_time = 500
+format = ' took [$duration]($style) '
