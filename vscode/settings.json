@@ -1,0 +1,71 @@
+{
+    "terminal.integrated.fontFamily": "'FiraCode Nerd Font', monospace, 'Hack Nerd Font'",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "git.autofetch": true,
+    "github.copilot.editor.enableAutoCompletions": true,
+    "githubPullRequests.pullBranch": "never",
+    "files.associations": {
+        "*.prisma": "prisma",
+        "*.twig": "html",
+        "*.liquid": "yaml",
+        "*.ftl": "javascript"
+    },
+    "[ruby]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.defaultFormatter": "testdouble.vscode-standard-ruby",
+        "editor.formatOnSave": false,
+        "editor.formatOnType": true,
+        "editor.formatOnPaste": false,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "editor.rulers": [
+            120
+        ],
+        "editor.semanticHighlighting.enabled": true
+    },
+    "[typescript]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
+    "[typescriptreact]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
+    "[plantuml]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
+    "rubyLsp.rubyVersionManager": {
+        "identifier": "asdf"
+    },
+    "rubyLsp.formatter": "standard",
+    "rubyLsp.bundleGemfile": "/Users/hyuga/.ruby-lsp/Gemfile",
+    "rubyLsp.enabledFeatures": {
+        "codeActions": false,
+        "diagnostics": false,
+        "documentHighlights": true,
+        "documentLink": true,
+        "documentSymbols": true,
+        "foldingRanges": true,
+        "formatting": false,
+        "hover": true,
+        "inlayHint": true,
+        "onTypeFormatting": true,
+        "selectionRanges": true,
+        "semanticHighlighting": true,
+        "completion": true,
+        "codeLens": true,
+        "definition": true,
+        "workspaceSymbol": true,
+        "signatureHelp": true,
+        "typeHierarchy": true
+    },
+    "[sql]": {
+        "editor.defaultFormatter": "ReneSaarsoo.sql-formatter-vsc"
+    },
+    "SQL-Formatter-VSCode.keywordCase": "upper",
+}
