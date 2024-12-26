@@ -187,3 +187,9 @@ if [ -f '/Users/hyuga/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hyuga/goo
 if [ -f '/Users/hyuga/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/completion.zsh.inc'; fi
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
+# PHP 7.0.33 ビルド用 
+# 参考: https://qiita.com/SeijiNishiwaki/items/f2595245357a83df350e
+export PATH="/opt/homebrew/opt/libxml2/bin:$PATH"
+
+export PATH="$HOME/bin:$PATH"
+
