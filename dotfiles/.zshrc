@@ -98,6 +98,9 @@ export LSCOLORS=cxfxcxdxbxegedabagacad
 alias ll='ls -lGF'
 alias ls='ls -GF'
 
+# 提案戦略設定 1.履歴、2.zsh補完機能
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 # origin alias
 alias relogin='exec $SHELL -l'
 alias ql='qlmanage -p "$@" >& /dev/null'
