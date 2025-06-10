@@ -143,34 +143,16 @@ function peco-history-selection() {
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
-#gcloud
-# local s="source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'"
-# s="$s;source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'"
-# zinit ice atload"${s}" wait lucid
-# zinit light zdharma-continuum/null
-# alias gcp='gcloud'
-
 # Go
 export GOPATH="${HOME}/go"
 PATH=$PATH:$GOPATH/bin
 
-# kubectl auto complete
-# local s="source <(kubectl completion zsh)"
-# zinit ice atload"${s}" wait lucid
-# zinit light zdharma-continuum/null
-# alias k=kubectl
-# complete -F __start_kubectl k
-
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # AWS MFA
 export AWS_MFA_SEC=`cat ~/.aws/20220823_mfasecret`
 alias mfa-aws='oathtool --totp --base32 $AWS_MFA_SEC | pbcopy && pbpaste && echo "[AWS] ワンタイムパスワードがコピーされました"'
 alias mfa-aws-s='NUM=`oathtool --totp --base32 $AWS_MFA_SEC` && echo $NUM ap-northeast-1'
 
-# Github MFA
-# export GH_MFA_SEC=`cat ~/dev/keys/github-mfa-sec`
-# alias mfa-gh='oathtool --totp --base32 $GH_MFA_SEC | pbcopy && pbpaste && echo "[Github] ワンタイムパスワードがコピーされました"'
 
 export PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/libjpeg/lib/pkgconfig:/usr/local/opt/libpng/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig:/usr/local/opt/libzip/lib/pkgconfig:/usr/local/opt/oniguruma/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/tidy-html5/lib/pkgconfig" \
 export PHP_BUILD_CONFIGURE_OPTS="--with-bz2=/usr/local/opt/bzip2 --with-iconv=/usr/local/opt/libiconv" \
