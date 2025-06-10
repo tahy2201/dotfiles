@@ -108,25 +108,10 @@ alias tf='terraform'
 alias ce='open $1 -a "/Applications/CotEditor.app"'
 alias sl='serverless'
 
-setopt auto_cd
-
-sshd() {
-  ssh -i ~/.ssh/juicer/Juicer_replace.pem ec2-user@$1
-}
-
-scpd() {
-  scp -i ~/.ssh/juicer/Juicer_replace.pem $1 ec2-user@$2
-}
-
-source $(which assume-role)
-
-PATH=$PATH:/usr/local/Cellar/libpq/11.5_1/bin/:~/bin/
-
+# homebrew更新
 if hash brew 2>/dev/null; then (brew update > /dev/null 2>&1 &); fi
 
-export PATH="$HOME/Applications/AWS-ElasticBeanstalk-CLI-2.2/eb/macosx/python2.7:$PATH"
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
-
 
 # asdf
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
@@ -147,34 +132,26 @@ bindkey '^R' peco-history-selection
 export GOPATH="${HOME}/go"
 PATH=$PATH:$GOPATH/bin
 
-
-# AWS MFA
-export AWS_MFA_SEC=`cat ~/.aws/20220823_mfasecret`
-alias mfa-aws='oathtool --totp --base32 $AWS_MFA_SEC | pbcopy && pbpaste && echo "[AWS] ワンタイムパスワードがコピーされました"'
-alias mfa-aws-s='NUM=`oathtool --totp --base32 $AWS_MFA_SEC` && echo $NUM ap-northeast-1'
-
-
-export PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/libjpeg/lib/pkgconfig:/usr/local/opt/libpng/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig:/usr/local/opt/libzip/lib/pkgconfig:/usr/local/opt/oniguruma/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/tidy-html5/lib/pkgconfig" \
-export PHP_BUILD_CONFIGURE_OPTS="--with-bz2=/usr/local/opt/bzip2 --with-iconv=/usr/local/opt/libiconv" \
-
 # diff -> colordiff
 if [[ -x `which colordiff` ]]; then
   alias diff='colordiff'
 fi
-
-alias jruby='~/bin/jruby-complete-9.1.15.0.jar'
-
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/hyuga/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/hyuga/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hyuga/google-cloud-sdk/completion.zsh.inc'; fi
+
+# postgresql
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
-# PHP 7.0.33 ビルド用 
-# 参考: https://qiita.com/SeijiNishiwaki/items/f2595245357a83df350e
-export PATH="/opt/homebrew/opt/libxml2/bin:$PATH"
-
+# ローカルで使うbinディレクトリ
 export PATH="$HOME/bin:$PATH"
 
+# ホスト名が会社用Macと一致する場合に、会社用設定ファイルを読み込む
+if [ "$(hostname)" = "LGadmins-MacBook-Pro.local" ]; then
+  if [ -f ~/.zshrc.company ]; then
+    source ~/.zshrc.company
+  fi
+fi
