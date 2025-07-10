@@ -114,9 +114,7 @@ if hash brew 2>/dev/null; then (brew update > /dev/null 2>&1 &); fi
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
 # asdf
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-. ~/.asdf/plugins/java/set-java-home.zsh
-export PATH="$(yarn global bin):$PATH"
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # peco (ctrl + r)
 # 要: brew install peco
