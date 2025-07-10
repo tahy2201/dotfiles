@@ -82,6 +82,18 @@ config.keys = {
         mods = "CTRL|SHIFT",
         action = wezterm.action.QuickSelect,
     },
+    -- 30行上に移動
+    {
+        key = "UpArrow",
+        mods = "CMD|SHIFT",
+        action = wezterm.action.ScrollByLine(-30)
+    },
+    -- 30行下に移動
+    {
+        key = "DownArrow",
+        mods = "CMD|SHIFT",
+        action = wezterm.action.ScrollByLine(30)
+    }
 }
 
 -- タブの表示をカスタマイズ
@@ -95,6 +107,31 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 
   return string.format(' %d ', tab_index)
 end)
+
+-- ステータスバーの右側に存在するワークスペースを全部表示して、アクティブなやつを強調表示しますわよ！
+wezterm.on('update-right-status', function(window, pane)
+    -- 現在アクティブなワークスペース名を取得しますの
+    local active_workspace = window:active_workspace() or "default"
+    -- 存在するワークスペース名を全部取得しますの
+    local all_workspaces = wezterm.mux.get_workspace_names() or {}
+
+    -- もしワークスペースリストが空なら、現在のワークスペースを追加
+    if #all_workspaces == 0 then all_workspaces = {active_workspace} end
+
+    -- 名前順にソート
+    table.sort(all_workspaces)
+
+    -- 全ワークスペースをカンマ区切りで結合
+    local all_workspaces_text = table.concat(all_workspaces, ', ')
+
+    -- 指定されたフォーマットで組み立て
+    local status_text = string.format('workspace: %s | all workspace: %s ',
+                                      active_workspace, all_workspaces_text)
+
+    window:set_right_status(status_text)
+end)
+-- 1秒ごとにステータスを更新するように設定しますの
+config.status_update_interval = 1000
 
 return config
 
