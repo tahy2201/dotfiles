@@ -22,7 +22,7 @@ done
 
 ```sh
 mkdir ~/.config/wezterm
-ln -s ~/work/tahy/dotfiles/dotfiles/wezterm.lua wezterm.lua
+ln -s ~/work/tahy/dotfiles/dotfiles/wezterm.lua ~/.config/wezterm/wezterm.lua
 ```
 
 ## wezterm
