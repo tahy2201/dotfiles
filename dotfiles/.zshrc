@@ -152,4 +152,9 @@ if [ "$(hostname)" = "LGadmins-MacBook-Pro.local" ]; then
   if [ -f ~/.zshrc.company ]; then
     source ~/.zshrc.company
   fi
+else
+  # 会社用ではない場合、プライベート設定ファイルを読み込む
+  if [ -f ~/.zshrc.private ]; then
+    source ~/.zshrc.private
+  fi
 fi
