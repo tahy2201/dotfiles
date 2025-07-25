@@ -94,6 +94,12 @@ disabled = true
 [docker_context]
 disabled = true
 
+[kubernetes]
+disabled = false
+format = '- [☸ $context - $namespace]($style) '
+style = 'bold #326ce5'
+detect_folders = ['k8s']
+
 [git_branch]
 format = '- [$symbol$branch(:$remote_branch)]($style) '
 
