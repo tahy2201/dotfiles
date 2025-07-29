@@ -158,3 +158,23 @@ else
     source ~/.zshrc.private
   fi
 fi
+
+# Weztermでの自動ログ機能
+# WEZTERM_PANEが設定されている（Weztermで実行されている）かつ
+# SCRIPT_RUNNINGが設定されていない（まだscriptが実行されていない）場合のみ実行
+if [[ -n "$WEZTERM_PANE" ]] && [[ -z "$SCRIPT_RUNNING" ]]; then
+    # 重複実行を防ぐためのフラグを設定
+    export SCRIPT_RUNNING=1
+    
+    # ログディレクトリを作成
+    mkdir -p ~/wezterm_logs
+    
+    # ログファイル名を生成（日時付き）
+    log_file="$HOME/wezterm_logs/session_$(date +%Y%m%d_%H%M%S).log"
+    
+    # ログ開始メッセージを表示・記録（英語フォーマットで日時表示）
+    echo "🎯 Weztermログセッション開始: $(LC_TIME=C date)" | tee -a "$log_file"
+    
+    # scriptコマンドでログを開始し、現在のシェルを置き換える
+    exec script -a "$log_file"
+fi
