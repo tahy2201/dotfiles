@@ -46,6 +46,12 @@ JsonUtils.check_record(record, column_definitions)
 
 その機能が `include` 先クラスの「一部」として振る舞うべきか判断する。独立したユーティリティならモジュールメソッドが適切である。
 
+## テストケース
+
+### describeコメント
+
+describe節の上には必ずコメントを書くこと
+
 
 :@kuwahata: memo
 - useCustomはcustom hook化する
