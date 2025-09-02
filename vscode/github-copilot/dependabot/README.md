@@ -158,3 +158,15 @@ Dependabot PR #1234 を包括調査してください
 ---
 
 このツールを使用して、Dependabot PRの効率的で安全な管理を実現しましょう！💯
+
+# Dependabot 調査テンプレート（分割版）
+
+このディレクトリには、Dependabot PR を調査・検証するためのプロンプトテンプレートが用途別に整理されています。
+
+- 共通フロー: `review-general.md`
+- Next.js/TypeScript/refine: `review-nextjs.md`
+- Rails: `review-rails.md`
+- Python(uv): `review-python-uv.md`
+- Terraform(AWS): `review-terraform-aws.md`
+
+既存の総合テンプレート（混在版）は `review.md` です。今後は上記の分割テンプレートを用途に応じて利用してください。
