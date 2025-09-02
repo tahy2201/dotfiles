@@ -93,19 +93,101 @@ config.keys = {
         key = "DownArrow",
         mods = "CMD|SHIFT",
         action = wezterm.action.ScrollByLine(30)
+    },
+    -- タブを左に移動
+    {
+        key = "LeftArrow",
+        mods = "CMD|ALT",
+        action = wezterm.action.MoveTabRelative(-1)
+    },
+    -- タブを右に移動
+    {
+        key = "RightArrow",
+        mods = "CMD|ALT",
+        action = wezterm.action.MoveTabRelative(1)
+    },
+    -- タブ名を変更
+    {
+        key = "t",
+        mods = "CMD|ALT",
+        action = wezterm.action.EmitEvent('rename-tab')
     }
 }
+
+-- 手動設定されたタブ名を管理
+local manual_tab_names = {}
+
+-- タブリネームイベントハンドラー
+wezterm.on('rename-tab', function(window, pane)
+    local choices = {
+        { id = '🏠 Home', label = '🏠 Home' },
+        { id = '💼 Work', label = '💼 Work' },
+        { id = '🛠️ Dev', label = '🛠️ Dev' },
+        { id = '🧪 Test', label = '🧪 Test' },
+        { id = '🐛 Debug', label = '🐛 Debug' },
+        { id = '🔨 Build', label = '🔨 Build' },
+        { id = '📝 Logs', label = '📝 Logs' },
+        { id = '📊 Monitor', label = '📊 Monitor' },
+        { id = '🌐 Server', label = '🌐 Server' },
+        { id = '📱 Mobile', label = '📱 Mobile' },
+        { id = 'backend', label = 'backend' },
+        { id = 'frontend', label = 'frontend' },
+        { id = 'database', label = 'database' },
+        { id = 'api', label = 'api' },
+        { id = 'docker', label = 'docker' },
+        { id = 'config', label = 'config' },
+        { id = 'deploy', label = 'deploy' },
+        { id = 'local', label = 'local' },
+        { id = 'staging', label = 'staging' },
+        { id = 'prod', label = 'prod' }
+    }
+    
+    window:perform_action(wezterm.action.InputSelector {
+        title = 'Choose tab name',
+        choices = choices,
+        fuzzy = true,
+        action = wezterm.action.EmitEvent('set-tab-name')
+    }, pane)
+end)
+
+-- タブ名設定イベントハンドラー
+wezterm.on('set-tab-name', function(window, pane, id, label)
+    if label then
+        local tab = window:active_tab()
+        local tab_id = tostring(tab.tab_id)
+        manual_tab_names[tab_id] = label
+        tab:set_title(label)
+    end
+end)
 
 -- タブの表示をカスタマイズ
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
   local tab_index = tab.tab_index + 1
-
+  local tab_id = tostring(tab.tab_id)
+  
   -- Copymode時のみ、"Copymode..."というテキストを表示
   if tab.is_active and string.match(tab.active_pane.title, 'Copy mode:') ~= nil then
     return string.format(' %d %s ', tab_index, 'Copy mode...')
   end
-
+  
+  -- 手動設定された名前があれば最優先で使用
+  local manual_title = manual_tab_names[tab_id]
+  if manual_title and manual_title ~= '' then
+    return string.format(' %d:%s ', tab_index, manual_title)
+  end
+  
+  -- それ以外はアクティブペインのタイトルを使用（weztermのデフォルト動作）
+  if tab.active_pane.title and tab.active_pane.title ~= '' then
+    return string.format(' %d:%s ', tab_index, tab.active_pane.title)
+  end
+  
   return string.format(' %d ', tab_index)
+end)
+
+-- タブが閉じられたときに名前をクリーンアップ
+wezterm.on('window-close-tab', function(window, tab)
+  local tab_id = tostring(tab.tab_id)
+  manual_tab_names[tab_id] = nil
 end)
 
 -- ステータスバーの右側に存在するワークスペースを全部表示して、アクティブなやつを強調表示しますわよ！
