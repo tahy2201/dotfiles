@@ -31,61 +31,7 @@ gh pr view [PR番号またはURL] \
 - セキュリティアップデートか
 - 変更ファイル一覧
 
-### Step 2: 変更ログ調査
-- リリースノート/CHANGELOG/タグを確認
-- Breaking changes / 新機能 / 非推奨 / セキュリティ修正 / 移行ガイド
-
-### Step 3: 影響範囲分析（共通観点）
-- プロジェクト内使用箇所の特定（import/require、設定、間接依存）
-- 実行時に影響を受けるワークスペース（アプリ/ワーカー/インフラ 等）
-
-参考コマンド（例）：
-```bash
-grep -r "<パッケージ名>" --include="*.rb" --include="*.js" --include="*.ts" --include="*.tsx" \
-  --include="*.json" --include="*.yml" --include="*.yaml" .
-```
-
-### Step 3完了時点: 中間調査レポート出力（必須）
-Step 3までの調査結果を中間レポートとして出力し、進捗確認と問題の早期発見を行います。
-
-出力ファイル:
-```
-dependabot-review/
-└── #[PR番号またはコミットハッシュ]/
-    └── dependabot-review-main-report-interim.md
-```
-
-中間レポート雛形:
-```markdown
-# 🤖 Dependabot PR中間調査レポート（Step 3完了）
-
-## 📦 更新内容
-- パッケージ: [package-name]
-- 更新前: [old-version]
-- 更新後: [new-version]
-- 種別: [patch/minor/major]
-- セキュリティ修正: [Yes/No]
-
-## 🔍 変更内容詳細
-[重要な変更点・Breaking Changes]
-
-## 🎯 影響範囲
-- 使用箇所: [...]
-- 影響度: [High/Medium/Low]
-- Breaking Changes: [Yes/No]
-
-## 📋 次のステップ（Step 4以降で実施）
-- [ ] 依存関係整合性確認
-- [ ] 静的解析・セキュリティチェック  
-- [ ] テスト実行による動作確認
-
----
-*中間調査実施日時: [YYYY-MM-DD HH:MM]*  
-*調査者: GitHub Copilot (自動調査)*  
-*PR番号: #[PR番号]*
-```
-
-### Step 3.5: ライブラリ詳細調査（必須）
+### Step 2: ライブラリ詳細調査（必須）
 - 公式説明（READMEから引用）
 - 主要機能（3つ以上）
 - 解決する課題 / カテゴリ / 人気度（DL・Star）
@@ -98,17 +44,77 @@ npm info <package>
 # gem info <package>
 ```
 
-### Step 4: 動作確認実行（各言語テンプレ参照）
+### Step 3: 変更ログ調査
+- リリースノート/CHANGELOG/タグを確認
+- Breaking changes / 新機能 / 非推奨 / セキュリティ修正 / 移行ガイド
+- 必ずwebアクセスして確認すること
+
+### Step 4: 影響範囲分析（共通観点）
+- プロジェクト内使用箇所の特定（import/require、設定、間接依存）
+- 実行時に影響を受けるワークスペース（アプリ/ワーカー/インフラ 等）
+
+参考コマンド（例）：
+```bash
+grep -r "<パッケージ名>" --include="*.rb" --include="*.js" --include="*.ts" --include="*.tsx" \
+  --include="*.json" --include="*.yml" --include="*.yaml" .
+```
+
+### Step 4完了時点: 中間調査レポート出力（必須）
+Step 3までの調査結果を中間レポートとして出力し、進捗確認と問題の早期発見を行います。
+
+出力ファイル:
+```
+dependabot-review/
+└── #[PR番号またはコミットハッシュ]/
+    └── dependabot-review-main-report-interim.md
+```
+
+中間レポート雛形:
+```markdown
+# 🤖 Dependabot PR中間調査レポート（Step 4完了）
+
+## 📦 更新内容
+- パッケージ: [package-name]
+- 更新前: [old-version]
+- 更新後: [new-version]
+- 種別: [patch/minor/major]
+- セキュリティ修正: [Yes/No]
+
+## 対象ライブラリについて
+- 公式説明（READMEから引用）
+- 主要機能（3つ以上）
+- 解決する課題 / カテゴリ / 人気度（DL・Star）
+
+## 🔍 変更内容詳細
+[重要な変更点・Breaking Changes]
+
+## 🎯 影響範囲
+- 使用箇所: [...]
+- 影響度: [High/Medium/Low]
+- Breaking Changes: [Yes/No]
+
+## 📋 次のステップ
+- [ ] 依存関係整合性確認
+- [ ] 静的解析・セキュリティチェック  
+- [ ] テスト実行による動作確認
+
+---
+*中間調査実施日時: [YYYY-MM-DD HH:MM]*  
+*調査者: GitHub Copilot (自動調査)*  
+*PR番号: #[PR番号]*
+```
+
+### Step 5: 動作確認実行（各言語テンプレ参照）
 - 静的解析
 - セキュリティチェック
 - 実機能テスト（ヘルプ表示、基本機能、オプション、エラー動作）
 
-### Step 5: 実証テスト（該当する場合のみ）
+### Step 6: 実証テスト（該当する場合のみ）
 - Before/Afterの状態取得
 - 実行コマンド
 - Afterの状態取得（DB等はJSONで保存）
 
-### Step 6: レポート生成と証跡記録（必須）
+### Step 7: レポート生成と証跡記録（必須）
 出力フォルダ:
 ```
 dependabot-review/
@@ -128,6 +134,11 @@ dependabot-review/
 - 更新後: [new-version]
 - 種別: [patch/minor/major]
 - セキュリティ修正: [Yes/No]
+
+## 対象ライブラリについて
+- 公式説明（READMEから引用）
+- 主要機能（3つ以上）
+- 解決する課題 / カテゴリ / 人気度（DL・Star）
 
 ## 📚 ライブラリについて
 - 用途・役割: [...]
@@ -158,7 +169,7 @@ dependabot-review/
 *PR番号: #[PR番号]*
 ```
 
-### Step 7: 証跡記録（コメント投稿）
+### Step 8: 証跡記録（コメント投稿）
 ```bash
 PR_NUMBER=[PR番号]
 REPORT_DIR="dependabot-review/#${PR_NUMBER}"
