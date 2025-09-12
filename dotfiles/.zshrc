@@ -159,7 +159,5 @@ else
   fi
 fi
 
-# uv
-source $HOME/.local/bin/env
 # uv 補完
 eval "$(uv generate-shell-completion zsh)"
