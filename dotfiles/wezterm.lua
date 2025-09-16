@@ -215,13 +215,13 @@ end)
 -- 1秒ごとにステータスを更新するように設定しますの
 config.status_update_interval = 1000
 
--- デフォルトで起動するプログラムを設定（自動ログ付き）
-config.default_prog = {
-    '/bin/zsh', 
-    '-l',
-    '-c', 
-    'mkdir -p ~/wezterm_logs && echo "🎯 自動ログ開始: $(LC_TIME=C date)" && exec script -q ~/wezterm_logs/session_$(date +%Y%m%d_%H%M%S).log'
-}
+-- デフォルトで起動するプログラムを設定. claude codeの表示が壊れるのでコメントアウト
+-- config.default_prog = {
+--     '/bin/zsh', 
+--     '-l',
+--     '-c', 
+--     'mkdir -p ~/wezterm_logs && echo "🎯 自動ログ開始: $(LC_TIME=C date)" && exec script -q ~/wezterm_logs/session_$(date +%Y%m%d_%H%M%S).log'
+-- }
 
 return config
 
