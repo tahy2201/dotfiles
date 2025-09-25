@@ -108,6 +108,21 @@ alias tf='terraform'
 alias ce='open $1 -a "/Applications/CotEditor.app"'
 alias sl='serverless'
 
+# git branch cleanup (削除安全版)
+# main, master, develop ブランチは削除しない
+git-branch-cleanup() {
+    echo "以下のブランチが削除されます："
+    git branch --merged | grep -v "\*\|main\|master\|develop"
+    echo -n "削除しますか？ (y/N): "
+    read answer
+    if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+        git branch --merged | grep -v "\*\|main\|master\|develop" | xargs -n 1 git branch -d
+        echo "削除完了！"
+    else
+        echo "キャンセルしました"
+    fi
+}
+
 # homebrew更新
 if hash brew 2>/dev/null; then (brew update > /dev/null 2>&1 &); fi
 
