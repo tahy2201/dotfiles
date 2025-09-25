@@ -131,9 +131,7 @@ config.tab_max_width = 100
 local tabline = wezterm.plugin.require("https://github.com/michaelbrusegard/tabline.wez")
 tabline.setup({
     options = {
-        -- theme = "catppuccin-mocha",
-        theme = "cyberpunk",
-        -- theme = "Cobalt Neon",
+        theme = "Google Dark (Gogh)",
         section_separators = {
             left = wezterm.nerdfonts.ple_upper_left_triangle,
             right = wezterm.nerdfonts.ple_lower_right_triangle,
