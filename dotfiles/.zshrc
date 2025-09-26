@@ -176,3 +176,6 @@ fi
 
 # uv 補完
 eval "$(uv generate-shell-completion zsh)"
+
+# claude用
+export PATH="$HOME/.local/bin:$PATH"
