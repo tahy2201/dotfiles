@@ -1,0 +1,17 @@
+[user]
+	name = tahy2201
+	email = 49649531+tahy2201@users.noreply.github.com
+[core]
+	editor = vim
+	pager = 
+[alias]
+  co = checkout
+  b = branch
+  wt = worktree
+  vacuum = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; git fetch --prune; };f"
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
