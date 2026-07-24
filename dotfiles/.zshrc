@@ -78,7 +78,7 @@ zinit light zsh-users/zsh-autosuggestions
 zstyle ':completion:*' completer _complete _approximate
 
 ## コマンド補完
-zinit ice wait'0'; zinit light zsh-users/zsh-completions
+zinit ice wait'0' lucid; zinit light zsh-users/zsh-completions
 autoload -Uz compinit && compinit
 
 ## 補完で小文字でも大文字にマッチさせる
@@ -88,7 +88,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:default' menu select=1 
 
 ## シンタックスハイライト
-zinit ice wait'0';zinit light zsh-users/zsh-syntax-highlighting
+zinit ice wait'0' lucid; zinit light zsh-users/zsh-syntax-highlighting
 
 ## 区切り文字として使用しない
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
