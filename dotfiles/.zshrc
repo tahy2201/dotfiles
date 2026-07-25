@@ -128,8 +128,8 @@ if hash brew 2>/dev/null; then (brew update > /dev/null 2>&1 &); fi
 
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
-# asdf
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+# mise
+eval "$(mise activate zsh)"
 
 # peco (ctrl + r)
 # 要: brew install peco
