@@ -8,6 +8,7 @@
   co = checkout
   b = branch
   wt = worktree
+  sw = switch
   vacuum = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; git fetch --prune; };f"
 
 [filter "lfs"]
