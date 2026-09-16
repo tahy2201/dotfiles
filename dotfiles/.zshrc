@@ -131,15 +131,16 @@ export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PA
 # mise
 eval "$(mise activate zsh)"
 
-# peco (ctrl + r)
-# 要: brew install peco
-function peco-history-selection() {
-    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+# 履歴検索 (ctrl + r)
+# 要: brew install fzf
+# --query で打ちかけの文字列をそのまま検索語として引き継ぐ
+function fzf-history-selection() {
+    BUFFER=$(history -n 1 | tail -r | awk '!a[$0]++' | fzf --query "$LBUFFER")
     CURSOR=$#BUFFER
     zle reset-prompt
 }
-zle -N peco-history-selection
-bindkey '^R' peco-history-selection
+zle -N fzf-history-selection
+bindkey '^R' fzf-history-selection
 
 # Go
 export GOPATH="${HOME}/go"
