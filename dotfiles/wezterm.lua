@@ -16,10 +16,16 @@ end
 
 -- フォント
 config.font_size = 12.0
-config.font = wezterm.font('JetBrains Mono', { weight = 'Bold' })
+-- 英数は JetBrains Mono、日本語はヒラギノに落とす
+-- 指定しないと macOS が韓国語用の Apple SD Gothic Neo を拾ってしまう
+-- 日本語を DemiBold にしているのは英数の Medium と太さの印象を揃えるため
+config.font = wezterm.font_with_fallback {
+    { family = 'JetBrains Mono', weight = 'Medium' },
+    { family = 'Hiragino Kaku Gothic ProN', weight = 'DemiBold' },
+}
 
 -- 背景の非透過率（1なら完全に透過させない）
-config.window_background_opacity = 0.90
+config.window_background_opacity = 1
 
 -- タブバーも設定
 config.enable_tab_bar = true
