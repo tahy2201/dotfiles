@@ -143,7 +143,9 @@ config.keys = {
         mods = "CMD",
         action = wezterm.action.ActivateKeyTable {
             name = 'workspace_mode',
-            one_shot = false,
+            -- true でないと PromptInputLine の入力中もモードが生きたままになり、
+            -- 打った文字が n / r のキーとして吸われる
+            one_shot = true,
             timeout_milliseconds = 3000,
         }
     }
