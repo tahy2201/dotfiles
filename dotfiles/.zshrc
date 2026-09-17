@@ -185,3 +185,11 @@ fpath=(/Users/hyuga/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
+
+# 起動直後のプロンプトを画面下端へ寄せる
+# ターミナルは上から書き始めるため、新しいシェルほど視線が上に飛ぶ。
+# 空行で埋めて最初から下端に置くことで、既存タブとの視線移動をなくす
+if [[ -o interactive ]] && [[ -z "$_ZSH_PROMPT_PADDED" ]]; then
+  export _ZSH_PROMPT_PADDED=1
+  printf '\n%.0s' {1..$((LINES - 2))}
+fi
