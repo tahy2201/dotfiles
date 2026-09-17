@@ -186,6 +186,13 @@ autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
+# zoxide (z / zi)
+# 要: brew install zoxide
+# 訪問履歴を学習して部分一致でジャンプする。cd はそのまま残る
+# 親子で名前が被る場合（foo と foo.worktrees など）は、
+# 訪問回数のスコアと末尾要素のマッチで区別される
+eval "$(zoxide init zsh)"
+
 # タスク単位で wezterm workspace を立ち上げて claude を起動する
 # claude のセッション履歴は cwd 単位で分かれるため、タスクごとに cwd を分けておくと
 # --resume の候補が自動的にそのタスクのものだけに絞られる
