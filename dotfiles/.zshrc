@@ -193,42 +193,9 @@ compinit
 # 訪問回数のスコアと末尾要素のマッチで区別される
 eval "$(zoxide init zsh)"
 
-# タスク単位で wezterm workspace を立ち上げて claude を起動する
-# claude のセッション履歴は cwd 単位で分かれるため、タスクごとに cwd を分けておくと
-# --resume の候補が自動的にそのタスクのものだけに絞られる
-# 使い方: cw <task-name> [dir]   dir 省略時はカレントディレクトリ
-cw() {
-  local name="$1"
-  if [[ -z "$name" ]]; then
-    echo "usage: cw <task-name> [dir]" >&2
-    return 1
-  fi
-  local dir="${2:-$PWD}"
-  if [[ ! -d "$dir" ]]; then
-    echo "cw: no such directory: $dir" >&2
-    return 1
-  fi
-  # --workspace は --new-window とセットでないと効かない
-  # claude を抜けてもそのままシェルが残るようにする
-  wezterm cli spawn --new-window --workspace "$name" --cwd "$dir" -- zsh -lc 'claude; exec zsh'
-}
-
-# worktree を切ってから cw する。ブランチを分けたいタスク用
-# 使い方: cwt <branch-name>
-cwt() {
-  local name="$1"
-  if [[ -z "$name" ]]; then
-    echo "usage: cwt <branch-name>" >&2
-    return 1
-  fi
-  local root wt
-  root=$(git rev-parse --show-toplevel) || return 1
-  wt="${root}-worktrees/${name}"
-  if [[ ! -d "$wt" ]]; then
-    git worktree add -b "$name" "$wt" || return 1
-  fi
-  cw "$name" "$wt"
-}
+# claude 起動・セッション操作（cw/cwt, cs/cs-me, claude-me）
+source "${0:A:h}/zsh/claude-wezterm.zsh"
+source "${0:A:h}/zsh/claude-sessions.zsh"
 
 # 起動直後のプロンプトを画面下端へ寄せる
 # ターミナルは上から書き始めるため、新しいシェルほど視線が上に飛ぶ。
@@ -274,42 +241,3 @@ gwtrm() {
   done
   git worktree prune
 }
-
-# claude セッション操作
-alias cr='claude --resume'
-alias cc='claude --continue'
-
-# 全プロジェクト横断でセッションを選んで resume する
-# claude の履歴は cwd ごとにディレクトリが分かれるため、標準の --resume では
-# リポジトリをまたいだ検索ができない。その穴を埋める
-# タイトルで絞り込む: cs / 会話の中身で絞り込む: cs <検索語>
-cs() {
-  local list sel cwd sid
-  list=$(claude-sessions) || return 1
-  if [[ -n "$1" ]]; then
-    # 中身の全文検索。ヒットしたセッションのファイル名から id を引いて一覧を絞る
-    local ids
-    ids=$(grep -rl -- "$1" ~/.claude/projects/*/*.jsonl 2>/dev/null \
-          | sed 's|.*/||; s|\.jsonl$||')
-    if [[ -z "$ids" ]]; then
-      echo "cs: no session contains: $1" >&2
-      return 1
-    fi
-    # 複数行を 1 パターンとして渡すと取りこぼすため -f - でパターン列として読ませる
-    list=$(print -r -- "$list" | grep -F -f <(print -r -- "$ids"))
-  fi
-  # 表示は日付/プロジェクト/タイトルのみ。cwd と id は後段で使うため列としては残す
-  sel=$(print -r -- "$list" | fzf --delimiter='\t' --with-nth=1,2,3 \
-        --preview 'echo {3}' --preview-window=down:3:wrap) || return 0
-  [[ -z "$sel" ]] && return 0
-  cwd=$(print -r -- "$sel" | cut -f4)
-  sid=$(print -r -- "$sel" | cut -f5)
-  [[ -d "$cwd" ]] || { echo "cs: directory is gone: $cwd" >&2; return 1; }
-  (cd "$cwd" && claude --resume "$sid")
-}
-
-# 個人アカウントで claude を起動する
-# 認証情報は CLAUDE_CONFIG_DIR ごとに keychain のサービス名が分かれるため、
-# 設定ディレクトリを分けるだけで会社/個人のログインを併存できる。
-# グローバル設定は ~/.claude-personal 側から symlink して共用する
-alias claude-me='CLAUDE_CONFIG_DIR="$HOME/.claude-personal" claude'
