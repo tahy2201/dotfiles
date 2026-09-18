@@ -238,6 +238,43 @@ if [[ -o interactive ]] && [[ -z "$_ZSH_PROMPT_PADDED" ]]; then
   printf '\n%.0s' {1..$((LINES - 2))}
 fi
 
+# worktree を選んでまとめて削除する
+# git worktree remove はパスを 1 つずつ渡す必要があり、消して良いかの判断も
+# 自分で調べないといけない。一覧に判定を添えて Tab で複数選べるようにする
+# 印: - マージ済み / * 未マージ / ! 未コミットあり / ? detached
+gwtrm() {
+  local list sel
+  list=$(git-wt-clean) || return 1
+  if [[ -z "$list" ]]; then
+    echo "gwtrm: worktree がない" >&2
+    return 0
+  fi
+  sel=$(print -r -- "$list" | fzf --multi --delimiter='\t' --with-nth=1,2,3,4 \
+        --header='Tab で複数選択 / Enter で削除確認' \
+        --preview 'git -C {5} status --short --branch 2>/dev/null | head -20' \
+        --preview-window=down:8:wrap) || return 0
+  [[ -z "$sel" ]] && return 0
+
+  echo "以下を削除する:"
+  print -r -- "$sel" | awk -F'\t' '{printf "  %s %s (%s)\n", $1, $2, $4}'
+  echo -n "よろしいですか? (y/N): "
+  local ans; read ans
+  [[ "$ans" != [yY] ]] && { echo "キャンセルした"; return 0; }
+
+  # path は zsh では PATH と連動する特殊変数なので、ローカル変数名に使わない
+  local wt
+  print -r -- "$sel" | cut -f5 | while read -r wt; do
+    # 未コミットの変更がある worktree は --force なしでは消せない。
+    # 取り返しがつかないので force はかけず、失敗として残す
+    if git worktree remove "$wt" 2>/dev/null; then
+      echo "削除: $(basename "$wt")"
+    else
+      echo "失敗: $(basename "$wt") (未コミットの変更が残っている可能性)" >&2
+    fi
+  done
+  git worktree prune
+}
+
 # claude セッション操作
 alias cr='claude --resume'
 alias cc='claude --continue'
