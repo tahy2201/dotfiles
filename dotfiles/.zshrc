@@ -307,3 +307,9 @@ cs() {
   [[ -d "$cwd" ]] || { echo "cs: directory is gone: $cwd" >&2; return 1; }
   (cd "$cwd" && claude --resume "$sid")
 }
+
+# 個人アカウントで claude を起動する
+# 認証情報は CLAUDE_CONFIG_DIR ごとに keychain のサービス名が分かれるため、
+# 設定ディレクトリを分けるだけで会社/個人のログインを併存できる。
+# グローバル設定は ~/.claude-personal 側から symlink して共用する
+alias claude-me='CLAUDE_CONFIG_DIR="$HOME/.claude-personal" claude'
