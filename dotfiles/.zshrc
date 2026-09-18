@@ -194,8 +194,13 @@ compinit
 eval "$(zoxide init zsh)"
 
 # claude 起動・セッション操作（cw/cwt, cs/cs-me, claude-me）
-source "${0:A:h}/zsh/claude-wezterm.zsh"
-source "${0:A:h}/zsh/claude-sessions.zsh"
+# $0 はログインシェル起動時（zsh -l）に信頼できないため、
+# gen-dotfile-link.sh が作る ~/.zshrc のリンク先を起点にする
+_zshrc_real_dir="$HOME/.zshrc"
+_zshrc_real_dir="${_zshrc_real_dir:A:h}"
+source "$_zshrc_real_dir/zsh/claude-wezterm.zsh"
+source "$_zshrc_real_dir/zsh/claude-sessions.zsh"
+unset _zshrc_real_dir
 
 # 起動直後のプロンプトを画面下端へ寄せる
 # ターミナルは上から書き始めるため、新しいシェルほど視線が上に飛ぶ。
