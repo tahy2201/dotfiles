@@ -79,6 +79,10 @@ zstyle ':completion:*' completer _complete _approximate
 
 ## コマンド補完
 zinit ice wait'0' lucid; zinit light zsh-users/zsh-completions
+# compinit は fpath を全部足し終えてから 1 回だけ呼ぶ。
+# 途中で fpath が変わって再度呼ぶと、.zcompdump のファイル数が毎回食い違い、
+# 起動のたびに dump を作り直して 1 回あたり 300〜400ms かかる
+fpath=(/Users/hyuga/.docker/completions $fpath)
 autoload -Uz compinit && compinit
 
 ## 補完で小文字でも大文字にマッチさせる
@@ -181,9 +185,7 @@ eval "$(uv generate-shell-completion zsh)"
 # claude用
 export PATH="$HOME/.local/bin:$PATH"
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/hyuga/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
+# fpath 追加は「コマンド補完」の compinit 前へ移した（compinit を 1 回にまとめるため）
 # End of Docker CLI completions
 
 # zoxide (z / zi)
