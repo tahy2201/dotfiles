@@ -72,6 +72,7 @@ $spack\
 $memory_usage\
 $aws\
 ${custom.assume_role}\
+${custom.assume_role_expired}\
 $gcloud\
 $openstack\
 $azure\
@@ -137,12 +138,18 @@ disabled = true
 
 [custom.assume_role]
 symbol = '󰆧'
-command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE " '
+command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE $(( (ROLE_SESSION_START + ROLE_SESSION_TIMEOUT - $(date +%s)) / 60 ))m"'
 style = 'bold fg:178'
-when = """
-test "$AWS_ACCOUNT_ROLE" -a "$AWS_ACCOUNT_NAME"
-"""
-format = '- [$symbol $output]($style)'
+when = 'test -n "$AWS_ACCOUNT_ROLE" -a -n "$ROLE_SESSION_START" -a $(( ROLE_SESSION_START + ROLE_SESSION_TIMEOUT )) -gt $(date +%s)'
+format = '- [$symbol $output]($style) '
+
+# 期限切れ後も認証情報は環境変数に残り aws コマンドが失敗するため、非表示にせず [expired] を付けて出す
+[custom.assume_role_expired]
+symbol = '󰆧'
+command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE"'
+style = 'bold fg:178'
+when = 'test -n "$AWS_ACCOUNT_ROLE" -a -n "$ROLE_SESSION_START" -a $(( ROLE_SESSION_START + ROLE_SESSION_TIMEOUT )) -le $(date +%s)'
+format = '- [$symbol ]($style)[\[expired\]](bold fg:240)[$output]($style) '
 
 [cmd_duration]
 min_time = 500
