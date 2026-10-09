@@ -71,8 +71,6 @@ $meson\
 $spack\
 $memory_usage\
 $aws\
-${custom.assume_role}\
-${custom.assume_role_expired}\
 $gcloud\
 $openstack\
 $azure\
@@ -91,8 +89,12 @@ $container\
 $shell\
 $character"""
 
+# AWS_CREDENTIAL_EXPIRATION が env にあれば残り時間を出す。失効後も env の認証情報で aws コマンドが失敗するため [expired] を出す
 [aws]
-disabled = true
+# AWS_PROFILE 未設定でも [default] を拾って記号だけ出るため、$profile が空なら丸ごと出さない
+format = '(- [󰆧 $profile( $duration)]($style) )'
+expiration_symbol = '[expired]'
+style = 'bold fg:178'
 
 [docker_context]
 disabled = true
@@ -135,21 +137,6 @@ style = 'fg:7'
 
 [gcloud]
 disabled = true
-
-[custom.assume_role]
-symbol = '󰆧'
-command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE $(( (ROLE_SESSION_START + ROLE_SESSION_TIMEOUT - $(date +%s)) / 60 ))m"'
-style = 'bold fg:178'
-when = 'test -n "$AWS_ACCOUNT_ROLE" -a -n "$ROLE_SESSION_START" -a $(( ROLE_SESSION_START + ROLE_SESSION_TIMEOUT )) -gt $(date +%s)'
-format = '- [$symbol $output]($style) '
-
-# 期限切れ後も認証情報は環境変数に残り aws コマンドが失敗するため、非表示にせず [expired] を付けて出す
-[custom.assume_role_expired]
-symbol = '󰆧'
-command = 'echo "$AWS_ACCOUNT_NAME/$AWS_ACCOUNT_ROLE"'
-style = 'bold fg:178'
-when = 'test -n "$AWS_ACCOUNT_ROLE" -a -n "$ROLE_SESSION_START" -a $(( ROLE_SESSION_START + ROLE_SESSION_TIMEOUT )) -le $(date +%s)'
-format = '- [$symbol ]($style)[\[expired\]](bold fg:240)[$output]($style) '
 
 [cmd_duration]
 min_time = 500
