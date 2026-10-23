@@ -24,6 +24,10 @@ config.font = wezterm.font_with_fallback {
     { family = 'Hiragino Kaku Gothic ProN', weight = 'DemiBold' },
 }
 
+-- 左 Option を Meta として送り、zsh の Alt+F / Alt+B などを効かせる
+-- true だと Option+F が ƒ のような合成文字になってしまう
+config.send_composed_key_when_left_alt_is_pressed = false
+
 -- 背景の非透過率（1なら完全に透過させない）
 config.window_background_opacity = 1
 
