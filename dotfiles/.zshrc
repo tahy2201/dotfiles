@@ -184,9 +184,6 @@ eval "$(uv generate-shell-completion zsh)"
 
 # claude用
 export PATH="$HOME/.local/bin:$PATH"
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-# fpath 追加は「コマンド補完」の compinit 前へ移した（compinit を 1 回にまとめるため）
-# End of Docker CLI completions
 
 # zoxide (z / zi)
 # 要: brew install zoxide
@@ -248,3 +245,4 @@ gwtrm() {
   done
   git worktree prune
 }
+hash -d signal=~/work/signal/signal
