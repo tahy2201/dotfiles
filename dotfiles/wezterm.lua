@@ -41,6 +41,19 @@ config.inactive_pane_hsb = {
     brightness = 0.2,
 }
 
+-- 30行スクロール。vim や Claude Code のフルスクリーン表示のような別画面
+-- （alternate screen）には wezterm のスクロールバックが無く ScrollByLine が
+-- 効かないので、そのときはアプリ側に PageUp / PageDown を送る
+local function scroll_or_page(lines, page_key)
+    return wezterm.action_callback(function(win, pane)
+        if pane:is_alt_screen_active() then
+            win:perform_action(wezterm.action.SendKey { key = page_key }, pane)
+        else
+            win:perform_action(wezterm.action.ScrollByLine(lines), pane)
+        end
+    end)
+end
+
 -- キーバインド
 config.keys = {
 
@@ -96,13 +109,13 @@ config.keys = {
     {
         key = "UpArrow",
         mods = "CMD|SHIFT",
-        action = wezterm.action.ScrollByLine(-30)
+        action = scroll_or_page(-30, 'PageUp')
     },
     -- 30行下に移動
     {
         key = "DownArrow",
         mods = "CMD|SHIFT",
-        action = wezterm.action.ScrollByLine(30)
+        action = scroll_or_page(30, 'PageDown')
     },
     -- タブを左に移動
     {
