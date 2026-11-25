@@ -13,3 +13,7 @@ mkdir -p ~/.claude/skills
 for skill in $SCRIPT_DIR/skills/*/; do
   ln -sfn ${skill%/} ~/.claude/skills/$(basename $skill)
 done
+# ~/.claude/hooks と agents には他のファイルも入るため、ファイル単位でリンクする
+mkdir -p ~/.claude/hooks ~/.claude/agents
+ln -sf $SCRIPT_DIR/hooks/rv-gate.sh ~/.claude/hooks/rv-gate.sh
+ln -sf $SCRIPT_DIR/agents/rv.md ~/.claude/agents/rv.md
