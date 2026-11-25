@@ -245,4 +245,3 @@ gwtrm() {
   done
   git worktree prune
 }
-hash -d signal=~/work/signal/signal
