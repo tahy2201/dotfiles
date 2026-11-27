@@ -245,3 +245,32 @@ gwtrm() {
   done
   git worktree prune
 }
+
+# VS Code を、リポジトリに合ったプロファイルで開く
+# worktree はパスが毎回変わるため、VS Code のプロファイルの紐づけが効かない。
+# 元のリポジトリ（git の共通ディレクトリ）の場所でプロファイルを決めて、
+# `code --profile` で開く（開いたパスにプロファイルが紐づき、次回からも効く）
+# 対応表は ~/.config/vscode-profiles.tsv に「パス<TAB>プロファイル名」で書く。
+# 一番長く一致したパスを使う。業務の名前を含むのでリポジトリには置かない
+# 使い方: vw [ディレクトリ]
+vw() {
+  local dir="${1:-.}" root main prefix name profile="" best=0 target
+  root=$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null) || root="${dir:A}"
+  main=$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+  main="${main%/.git}"
+  [[ -z "$main" ]] && main="$root"
+  if [[ -r ~/.config/vscode-profiles.tsv ]]; then
+    while IFS=$'\t' read -r prefix name; do
+      [[ -z "$prefix" || "$prefix" == \#* ]] && continue
+      prefix="${prefix/#\~/$HOME}"
+      if [[ ( "$main" == "$prefix" || "$main" == "$prefix"/* ) && ${#prefix} -gt $best ]]; then
+        profile="$name"; best=${#prefix}
+      fi
+    done < ~/.config/vscode-profiles.tsv
+  fi
+  # リポジトリと同じ名前のワークスペースファイルがあれば、フォルダよりそちらを開く
+  target="$root/${main:t}.code-workspace"
+  [[ -f "$target" ]] || target="$root"
+  echo "vw: ${target/#$HOME/~} (profile: ${profile:-Default})"
+  code ${profile:+--profile "$profile"} "$target"
+}
