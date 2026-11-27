@@ -272,5 +272,5 @@ vw() {
   target="$root/${main:t}.code-workspace"
   [[ -f "$target" ]] || target="$root"
   echo "vw: ${target/#$HOME/~} (profile: ${profile:-Default})"
-  code ${profile:+--profile "$profile"} "$target"
+  code ${profile:+--profile} ${profile:+"$profile"} "$target"
 }
